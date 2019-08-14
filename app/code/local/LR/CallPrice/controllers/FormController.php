@@ -1,6 +1,10 @@
 <?php
 class LR_CallPrice_FormController extends Mage_Core_Controller_Front_Action
 {
+    const XML_PATH_EMAIL_RECIPIENT  = 'catalog/call_for_price/send_email_to';
+    const XML_PATH_EMAIL_SENDER     = 'catalog/call_for_price/email_sender';
+    const XML_PATH_EMAIL_TEMPLATE   = 'catalog/call_for_price/email_template';
+    
     public function loadformAction()
     {
         /*$this->loadLayout();
@@ -9,23 +13,9 @@ class LR_CallPrice_FormController extends Mage_Core_Controller_Front_Action
         $request_form = $this->getLayout()->createBlock('lr_callprice/form','callforprice.form')->setTemplate('lr/callprice/callforprice_form.phtml')->toHtml();
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array('success' => $success,'request_form' => $request_form)));
     }
-    protected function _sendEmailTo()
-    {
-        return Mage::getStoreConfig('catalog/call_for_price/send_email_to');
-    }
-    protected function _emailSender()
-    {
-        return Mage::getStoreConfig('catalog/call_for_price/email_sender');
-    }
-    protected function _sendEmailTemplate()
-    {
-        return Mage::getStoreConfig('catalog/call_for_price/email_template');
-    }
-
-
+    
     public function submitAction()
     {
-
         if ($this->getRequest()->getPost())
         {
             $cp = Mage::getModel('lr_callprice/request');
@@ -44,22 +34,29 @@ class LR_CallPrice_FormController extends Mage_Core_Controller_Front_Action
             try
             {
                 $cp->save();
-
-                /* Send email to Admin */
-                $templateId = $this->_sendEmailTemplate();
-                $emailTemplate  = Mage::getModel('core/email_template')
-                    ->load($templateId);
-
-                 //Create an array of variables to assign to template
-                $data = array();
-                $data['name'] = $name;
-                $data['email'] = $email;
-                $data['telephone'] = $telephone;
-                $data['details']= $details;
-				$data['status']= "New"; 
-                // $processedTemplate = $emailTemplate->getProcessedTemplate($emailTemplateVariables);
-                $emailTemplate->send($this->_sendEmailTo(),$this->_emailSender(), $data);
-
+		
+				$data = array();
+						$data['name'] = $name;
+						$data['email'] = $email;
+						$data['telephone'] = $telephone;
+						$data['details']= $details;
+				$data['status']= "New";
+				
+				$postObject = new Varien_Object();
+						$postObject->setData($data);
+				
+				$translate  = Mage::getSingleton('core/translate');
+				$mailTemplate = Mage::getModel('core/email_template');
+				
+				$mailTemplate->setReplyTo($email)->sendTransactional(
+					Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE),
+					Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER),
+					Mage::getStoreConfig(self::XML_PATH_EMAIL_RECIPIENT),
+					null,
+					array('data' => $postObject)
+				);
+				$translate->setTranslateInline(true);  
+		
                 $success =true;
                 $message = $this->__('Your request is accepted.');
             }
