@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_callpricebackend_index>
+        <reference name="content">
+            <block type="lr_callprice/adminhtml_callpricebackend" name="callpricebackend" template="lr/callprice/callpricebackend.phtml"/>
+        </reference>
+    </adminhtml_callpricebackend_index>
+
+    <adminhtml_request_index>
+        <reference name="content">
+            <block type="lr_callprice/adminhtml_request" name="request" />
+        </reference>
+    </adminhtml_request_index>
+</layout>

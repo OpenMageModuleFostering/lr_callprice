@@ -1,0 +1,68 @@
+<?php
+/*
+(c) Copyright 2012 X.commerce, Inc.
+
+All rights reserved. No part of this code shall be reproduced,
+stored in a retrieval system, or transmitted by any means,
+electronic, mechanical, photocopying, recording, or otherwise,
+without written permission from X.commerce, Inc.  04-15-2012
+
+Please be aware that this code is not production ready.
+It is distributed to serve as an educational example, but in
+some cases error checking or something similar might have been
+neglected.
+*/
+?>
+<?php $submiturl = $this->helper('lr_callprice')->submitformurl();?>
+<?php $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+ if($customer_id!="")
+ {
+     $customerData = Mage::getModel('customer/customer')->load($customer_id);
+
+ }
+?>
+<div class="callprice_request_form">
+    <form action="<?php echo $this->getFormAction() ?>" name="cp_form" id="cp_form" method="post">
+    <div class="fieldset">
+
+        <ul class="form-list">
+            <li class="fields">
+                <div class="field">
+                    <label class="required" for="name"><em>*</em><?php echo $this->__('Name') ?></label>
+                    <div class="input-box">
+                        <input id="name" name="name" type="text" class="input-text required-entry" value="<?php echo Mage::getSingleton('customer/session')->getCustomer()->getName() ?>"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="required" for="email"><em>*</em><?php echo $this->__('Email') ?></label>
+                    <div class="input-box">
+                        <input id="email" name="email" type="text" class="input-text required-entry validate-email" value="<?php echo Mage::getSingleton('customer/session')->getCustomer()->getEmail() ?>"/>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <label class="required" for="telephone"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                <div class="input-box">
+                    <input id="telephone" name="telephone" type="text" class="input-text required-entry " value="<?php echo Mage::getSingleton('customer/session')->getCustomer()->getTelephone() ?>"/>
+                </div>
+            </li>
+            <li class="wide">
+                <label class="required" for="comment"><em>*</em><?php echo $this->__('Request Details') ?></label>
+                <div class="input-box">
+                    <textarea rows="3" cols="5" class="required-entry input-text" title="details" id="details" name="details"><?php echo $this->option_details() ?></textarea>
+                </div>
+				<div class="request_details_message"><?php echo $this->__('Note: Please include as much details and relevant options about the item to help us match your request with an accurate price.'); ?></div>
+            </li>
+        </ul>
+        <div>
+            <button type="button" class="button" onclick="if(dataForm.validator && dataForm.validator.validate()){submitcallforpriceform(this.form,'<?php echo $submiturl?>');}"><span><?php echo $this->__('Submit') ?></span></button>
+        </div>
+    </div>
+        <input type="hidden" name="product_id" value="<?php echo $this->getProductId(); ?>"/>
+    </form>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    var dataForm = new VarienForm('cp_form', true);
+    //]]>
+</script>
