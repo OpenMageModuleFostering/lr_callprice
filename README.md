@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 This extension hides the price and the add to cart button for specific products and replaces it with a Call For Price Button. This feature is applied to Product Details page , Product List page (Categroy page),Search result page.

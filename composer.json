@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/lr_callprice",
+    "name": "openmage-module-fostering\/lr_callprice",
     "type": "magento-module",
-    "license": "OSL-v3.0",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "This extension hides the price and the add to cart button for specific products and replaces it with a Call For Price Button. This feature is applied to Product Details page , Product List page (Categroy page),Search result page.",
     "authors": [
